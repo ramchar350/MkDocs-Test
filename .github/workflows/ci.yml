@@ -23,3 +23,17 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+  gh-pages:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create gh-pages branch
+        run: |
+          git checkout --orphan gh-pages
+          git rm -rf .
+          touch README.md
+          git add README.md
+          git commit -m "Initial gh-pages commit"
+          git push origin gh-pages
